@@ -3,8 +3,7 @@
 # Models a hangman game instance
 class Hangman
   def initialize
-    puts 'Welcome to Hangman!'
-    puts "Enter 'quit' to quit at any time \n\nTry to guess the word: "
+    puts "Welcome to Hangman!\nEnter 'quit' to quit at any time \n\nTry to guess the word: "
     new_word = generate_word.split('')
     p new_word
     spaces = create_blank_spaces(new_word)
@@ -20,6 +19,7 @@ class Hangman
       break if input == 'quit'
 
       update_spaces(input, new_word, spaces) if new_word.include?(input)
+      puts "\n"
     end
   end
 
@@ -41,7 +41,9 @@ class Hangman
   end
 
   def update_spaces(input, new_word, spaces)
-    spaces[new_word.index(input)] = input
+    new_word.each_with_index do |element, i|
+      spaces[i] = input if element == input
+    end
     spaces.each do |element|
       if element.nil?
         print '_ '
@@ -49,8 +51,6 @@ class Hangman
         print "#{element} "
       end
     end
-    puts "\n"
-    p spaces
   end
 end
 
