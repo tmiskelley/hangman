@@ -4,23 +4,24 @@
 class Hangman
   def initialize
     puts "Welcome to Hangman!\nEnter 'quit' to quit at any time \n\nTry to guess the word: "
-    new_word = generate_word.split('')
-    p new_word
-    spaces = create_blank_spaces(new_word)
-    play(new_word, spaces)
+    @new_word = generate_word.split('')
+    p @new_word
+    @spaces = create_blank_spaces
+    play
   end
 
   protected
 
-  def play(new_word, spaces)
-    loop do
+  def play
+    while @spaces.any?(&:nil?)
       print "\nGuess any letter: "
       input = gets.chomp
       break if input == 'quit'
 
-      update_spaces(input, new_word, spaces) if new_word.include?(input)
-      puts "\n"
+      wrong_letter unless @new_word.include?(input)
+      update_spaces(input)
     end
+    puts "\nYou win!"
   end
 
   private
@@ -31,8 +32,8 @@ class Hangman
     File.readlines(words, chomp: true)[rand_num]
   end
 
-  def create_blank_spaces(new_word)
-    letters = Array.new(new_word.length) { nil }
+  def create_blank_spaces
+    letters = Array.new(@new_word.length) { nil }
     letters.each do |element|
       print '_ ' if element.nil?
     end
@@ -40,17 +41,22 @@ class Hangman
     letters
   end
 
-  def update_spaces(input, new_word, spaces)
-    new_word.each_with_index do |element, i|
-      spaces[i] = input if element == input
+  def update_spaces(input)
+    @new_word.each_with_index do |element, i|
+      @spaces[i] = input if element == input
     end
-    spaces.each do |element|
+    @spaces.each do |element|
       if element.nil?
         print '_ '
       else
         print "#{element} "
       end
     end
+    puts "\n"
+  end
+
+  def wrong_letter
+    puts 'Incorrect.'
   end
 end
 
