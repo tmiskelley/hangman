@@ -7,6 +7,7 @@ class Hangman
     @new_word = generate_word.split('')
     p @new_word
     @spaces = create_blank_spaces
+    @wrong_guesses = []
     play
   end
 
@@ -18,7 +19,8 @@ class Hangman
       input = gets.chomp
       break if input == 'quit'
 
-      wrong_letter unless @new_word.include?(input)
+      wrong_letter(input) unless @new_word.include?(input)
+      puts "Incorrect guesses: #{@wrong_guesses}"
       update_spaces(input)
     end
     puts "\nYou win!"
@@ -45,18 +47,17 @@ class Hangman
     @new_word.each_with_index do |element, i|
       @spaces[i] = input if element == input
     end
+
     @spaces.each do |element|
-      if element.nil?
-        print '_ '
-      else
-        print "#{element} "
-      end
+      item = element.nil? ? '_ ' : "#{element} "
+      print item
     end
     puts "\n"
   end
 
-  def wrong_letter
+  def wrong_letter(input)
     puts 'Incorrect.'
+    @wrong_guesses.push(input) unless input.empty?
   end
 end
 
