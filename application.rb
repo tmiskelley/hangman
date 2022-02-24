@@ -6,7 +6,6 @@ class Hangman
     puts "Welcome to Hangman!\nEnter 'quit' to quit at any time \n\nTry to guess the word: "
 
     @new_word = generate_word.split('')
-    p @new_word
     @spaces = create_blank_spaces
     @wrong_guesses = []
     @max_error = 6
@@ -17,9 +16,7 @@ class Hangman
 
   def play
     while @spaces.any?(&:nil?)
-      print "\nGuess any letter: "
-      input = gets.chomp
-      break if input == 'quit'
+      input = user_input
 
       wrong_letter(input) unless @new_word.include?(input)
       break if @max_error.zero?
@@ -46,6 +43,19 @@ class Hangman
     end
     puts "\n"
     letters
+  end
+
+  def user_input
+    print "\nGuess any letter: "
+    input = gets.chomp
+    if input == 'quit'
+      exit(0)
+    elsif input.empty? || input.length > 1
+      puts 'Invaild input, please enter one letter.'
+    else
+      return input
+    end
+    user_input
   end
 
   def update_spaces(input)
