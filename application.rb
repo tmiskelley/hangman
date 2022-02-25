@@ -6,7 +6,8 @@ class Hangman
     puts "Welcome to Hangman!\nEnter 'quit' to quit at any time \n\nTry to guess the word: "
 
     @new_word = generate_word.split('')
-    @spaces = create_blank_spaces
+    p @new_word
+    @spaces = Array.new(@new_word.length) { nil }
     @wrong_guesses = []
     @max_error = 6
     play
@@ -15,6 +16,17 @@ class Hangman
   protected
 
   def play
+    @spaces.each do |element|
+      print '_ ' if element.nil?
+    end
+    print "\n"
+    main_loop
+    game_over
+  end
+
+  private
+
+  def main_loop
     while @spaces.any?(&:nil?)
       input = user_input
 
@@ -25,24 +37,12 @@ class Hangman
       @wrong_guesses.each { |i| print "#{i} " }
       update_spaces(input)
     end
-    game_over
   end
-
-  private
 
   def generate_word
     rand_num = rand(9893)
     words = File.open('dictonary.txt', 'r')
     File.readlines(words, chomp: true)[rand_num]
-  end
-
-  def create_blank_spaces
-    letters = Array.new(@new_word.length) { nil }
-    letters.each do |element|
-      print '_ ' if element.nil?
-    end
-    puts "\n"
-    letters
   end
 
   def user_input
