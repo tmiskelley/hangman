@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'json'
+
 def generate_word
   rand_num = rand(9893)
   words = File.open('dictonary.txt', 'r')
@@ -49,7 +51,7 @@ class Hangman
     print "\nGuess any letter: "
     input = gets.chomp
     if input == 'quit'
-      exit(0)
+      quit_game
     elsif input.empty? || input.length > 1
       puts 'Invaild input, please enter one letter.'
     else
@@ -80,6 +82,31 @@ class Hangman
   def game_over
     message = @max_error.zero? ? 'You lose!' : 'Congradulations! You win!'
     puts message
+  end
+
+  def quit_game
+    print 'Save game? y/n: '
+    choice = gets.chomp
+    case choice
+    when 'y'
+      save_game
+      exit(0)
+    when 'n'
+      exit(0)
+    else
+      puts 'Invalid input.'
+      quit_game
+    end
+  end
+
+  def save_game
+    save_data = {
+      new_word: @new_word,
+      spaces: @spaces,
+      wrong_guesses: @wrong_guesses,
+      max_error: @max_error
+    }
+    File.write('save-data.json', JSON.dump(save_data))
   end
 end
 
