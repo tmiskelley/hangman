@@ -1,11 +1,17 @@
 # frozen_string_literal: true
 
+def generate_word
+  rand_num = rand(9893)
+  words = File.open('dictonary.txt', 'r')
+  File.readlines(words, chomp: true)[rand_num]
+end
+
 # Models a hangman game instance
 class Hangman
-  def initialize
+  def initialize(word)
     puts "Welcome to Hangman!\nEnter 'quit' to quit at any time \n\nTry to guess the word: "
 
-    @new_word = generate_word.split('')
+    @new_word = word
     p @new_word
     @spaces = Array.new(@new_word.length) { nil }
     @wrong_guesses = []
@@ -37,12 +43,6 @@ class Hangman
       @wrong_guesses.each { |i| print "#{i} " }
       update_spaces(input)
     end
-  end
-
-  def generate_word
-    rand_num = rand(9893)
-    words = File.open('dictonary.txt', 'r')
-    File.readlines(words, chomp: true)[rand_num]
   end
 
   def user_input
@@ -83,4 +83,4 @@ class Hangman
   end
 end
 
-Hangman.new
+Hangman.new(generate_word.split(''))
