@@ -18,7 +18,6 @@ class Hangman
     else
       new_game(word)
     end
-    p @new_word
     play
   end
 
