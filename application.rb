@@ -47,16 +47,11 @@ class Hangman
   def load_game?
     print 'Would you like to load your previous save? y/n: '
     choice = gets.chomp
-    case choice
-    when 'y'
-      load_game
-      true
-    when 'n'
-      false
-    else
-      puts 'Invalid input.'
-      load_game?
+    until %w[y n].include?(choice)
+      puts 'Invalid input. Please enter y or n'
+      choice = gets.chomp
     end
+    load_game if choice == 'y'
   end
 
   def load_game
@@ -124,16 +119,12 @@ class Hangman
   def quit_game
     print 'Save game? y/n: '
     choice = gets.chomp
-    case choice
-    when 'y'
-      save_game
-      exit(0)
-    when 'n'
-      exit(0)
-    else
-      puts 'Invalid input.'
-      quit_game
+    until %w[y n].include?(choice)
+      puts 'Invaild input, please enter y or n'
+      choice = gets.chomp
     end
+    save_game if choice == 'y'
+    exit(0)
   end
 
   def save_game
